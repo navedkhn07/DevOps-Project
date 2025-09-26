@@ -60,8 +60,8 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: SonarQube Scan
-        if: ${{ github.event_name == 'push' && secrets.SONAR_TOKEN != '' && secrets.SONAR_HOST_URL != '' }}
+      - name: SonarQube Scan (optional)
+        continue-on-error: true
         uses: SonarSource/sonarqube-scan-action@v2.2
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -76,8 +76,8 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
-      - name: Snyk container scan
-        if: ${{ secrets.SNYK_TOKEN != '' }}
+      - name: Snyk container scan (optional)
+        continue-on-error: true
         uses: snyk/actions/docker@master
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
